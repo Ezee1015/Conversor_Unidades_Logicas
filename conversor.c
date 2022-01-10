@@ -97,7 +97,6 @@ long DecToOct (long Decimal) {
             Cociente=Dividendo/Divisor;
 
             Octal[i]=Resto+'0';
-            /* printf("\nRESTO %i - %i\n", Resto, i); */
             i++;
 
             Dividendo=Cociente;
@@ -179,7 +178,6 @@ long DecToBin (long Decimal) {
             i++;
 
             Dividendo=Cociente;
-            /* if (Cociente!=0 || Cociente!=1) printf("ERROR EN COCIENTE QUE ES %i > %i\n", Cociente, Divisor-1); */
         }
 
         sprintf(Binario,"%s%i", Binario, Cociente); // Agrega al Valor final el Cociente Final
