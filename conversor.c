@@ -222,16 +222,15 @@ long OctToDec (char Octal[1000]) {
 }
 
 long HexToDec (char Hexa[1000]) {
-        int i=0, Decimal=0,Base=16, Largo=-1; // Tengo que inicializar el Largo en -1 ya que si lo inicializo en 0, el primero número del vector que se encuentre va a ser un Largo++ y va a quedar como 1, pero para el vector necesito que el numero que exista en la primera posicion sea 0
+     int i=0, Base=16, Largo=-1; // Tengo que inicializar el Largo en -1 ya que si lo inicializo en 0, el primero número del vector que se encuentre va a ser un Largo++ y va a quedar como 1, pero para el vector necesito que el numero que exista en la primera posicion sea 0
+     long Decimal=0;
 
     for(i=0;i<1000;i++) {
         if (Hexa[i]=='0' || Hexa[i]=='1' || Hexa[i]=='2' || Hexa[i]=='3' || Hexa[i]=='4' || Hexa[i]=='5' || Hexa[i]=='6' || Hexa[i]=='7' || Hexa[i]=='8' || Hexa[i]=='9' || Hexa[i]=='A' || Hexa[i]=='B' || Hexa[i]=='C' || Hexa[i]=='D' || Hexa[i]=='E' || Hexa[i]=='F') Largo++;
     }
 
-    for(i=999; i>=0; i--) {
-        if ((Hexa[i])!='$') {
+    for(i=Largo; i>=0; i--) {
             Decimal=Decimal+((HexaToDecConverter(Hexa[i]))*(Pot(Base,(Largo-i))));
-        }
     }
 
     return Decimal;
@@ -331,7 +330,8 @@ int main () {
             DecToBin(HexToDec(Valor));
             printf("\n El Numero En Decimal es %ld\n", HexToDec(Valor));
             printf("\n El Numero En Octal es %ld\n", DecToOct(HexToDec(Valor)));
-            printf("\n El Numero En Hexadecimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c\n------\n", Valor[i]);
+            printf("\n El Numero En Hexadecimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);
+            printf("\n------\n");
             fflush(stdin);
             getchar();
         break;
