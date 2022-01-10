@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 
-char HexaValor[1004]=" "; // Tengo que crear esta variable porque no puedo pasar una cadena de caracteres como return de una función
+char HexaValor[1004]; // Tengo que crear esta variable porque no puedo pasar una cadena de caracteres como return de una función
 
 
 long Pot (int Base, int Exponente) {
@@ -91,18 +91,18 @@ long DecToOct (long Decimal) {
     int Divisor=8, Resto=0, i=0;
     char Octal[1000]="";
 
-    if (Dividendo > Divisor ) {
-        while(Dividendo > Divisor ) {
+    if (Dividendo > (Divisor-1) ) {
+        while(Dividendo > (Divisor-1) ) {
             Resto=Dividendo%Divisor;
             Cociente=Dividendo/Divisor;
 
             Octal[i]=Resto+'0';
+            /* printf("\nRESTO %i - %i\n", Resto, i); */
             i++;
 
             Dividendo=Cociente;
         }
 
-        sprintf(Octal,"%d%d", atoi(Octal), Cociente); // Agrega al Valor final el Cociente Final
 
     } else return Decimal;
 
@@ -118,7 +118,15 @@ long DecToOct (long Decimal) {
         Octal[(Largo-1)-i]=SWAP;
     }
 
-    return atof(Octal);
+        // Agrega al Valor final el Cociente Final
+    long OctaValor=0;
+    for(i=0;i<Largo;i++){
+        if (Octal[i]=='0' || Octal[i]=='1' || Octal[i]=='2' || Octal[i]=='3' || Octal[i]=='4' || Octal[i]=='5' || Octal[i]=='6' || Octal[i]=='7' || Octal[i]=='8' || Octal[i]=='9') OctaValor=OctaValor+((Octal[i]-'0') * Pot(10, Largo-i-1));
+    }
+    OctaValor=OctaValor+(Cociente * Pot(10, Largo));
+
+
+    return OctaValor;
 
 }
 
@@ -126,8 +134,8 @@ long DecToHex (long Decimal) { //Pongo Long pero igualmente esta funcion no devu
     int Dividendo=Decimal, Divisor=16, Resto=0, Cociente=0, i=0;
     char Hexa[1000]="";
 
-    if (Dividendo > Divisor ) {
-        while(Dividendo > Divisor ) {
+    if (Dividendo > (Divisor-1) ) {
+        while(Dividendo > (Divisor-1) ) {
             Resto=Dividendo%Divisor;
             Cociente=Dividendo/Divisor;
 
@@ -140,21 +148,21 @@ long DecToHex (long Decimal) { //Pongo Long pero igualmente esta funcion no devu
 
     } else { HexaValor[0]=HexaConverter(Decimal); return 1; }
 
+    sprintf(HexaValor,"%s%c", Hexa, HexaConverter(Cociente)); // Agrega al Valor final el Cociente Final
+
     char SWAP=' ';
     int Largo=0;
     for(i=0;i<1000;i++) {
-        if (Hexa[i]=='0' || Hexa[i]=='1' || Hexa[i]=='2' || Hexa[i]=='3' || Hexa[i]=='4' || Hexa[i]=='5' || Hexa[i]=='6' || Hexa[i]=='7' || Hexa[i]=='8' || Hexa[i]=='9' || Hexa[i]=='A' || Hexa[i]=='B' || Hexa[i]=='C' || Hexa[i]=='D' || Hexa[i]=='E' || Hexa[i]=='F') Largo++;
+        if (HexaValor[i]=='0' || HexaValor[i]=='1' || HexaValor[i]=='2' || HexaValor[i]=='3' || HexaValor[i]=='4' || HexaValor[i]=='5' || HexaValor[i]=='6' || HexaValor[i]=='7' || HexaValor[i]=='8' || HexaValor[i]=='9' || HexaValor[i]=='A' || HexaValor[i]=='B' || HexaValor[i]=='C' || HexaValor[i]=='D' || HexaValor[i]=='E' || HexaValor[i]=='F') Largo++;
     }
 
     for (i=0;i<(Largo/2);i++) {
-        SWAP=Hexa[i];
-        Hexa[i]=Hexa[(Largo-1)-i];
-        Hexa[(Largo-1)-i]=SWAP;
+        SWAP=HexaValor[i];
+        HexaValor[i]=HexaValor[(Largo-1)-i];
+        HexaValor[(Largo-1)-i]=SWAP;
     }
 
-    sprintf(HexaValor,"%c%s", HexaConverter(Cociente), Hexa); // Agrega al Valor final el Cociente Final
-
-    return 1;
+    return atol(HexaValor); // EN VALORES GRANDES NO FUNCIONA !!!!!! Por eso se usa HexaValor para devolver el resultado
 }
 
 long DecToBin (long Decimal) {
@@ -189,7 +197,7 @@ long DecToBin (long Decimal) {
     }
 
     printf("%s\n", Binario);
-    return atol(Binario);
+    return atol(Binario); // EN VALORES GRANDES NO FUNCIONA !!!!!!
     } else {
         printf("%ld\n",Decimal);
         return Decimal;
@@ -232,6 +240,11 @@ long HexToDec (char Hexa[1000]) {
 int main () {
     char Valor[1000], Caract=' ', Eleccion=' ';
     int i, Largo=0;
+
+    for(i=0;i<1004;i++){
+        HexaValor[i]=' ';
+        /* OctaValor[i]=' '; */
+    }
 
     system("clear");
 
@@ -293,10 +306,10 @@ int main () {
 
         case '2' :
             printf("\n\n-----\n El Numero En Binario es ");
-            DecToBin(atoi(Valor));
+            DecToBin(atol(Valor));
             printf("\n El Numero En Decimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);
             printf("\n\n El Numero En Octal es %ld\n", DecToOct(atol(Valor)));
-            DecToHex(atoi(Valor));
+            DecToHex(atol(Valor));
             printf("\n El Numero En Hexadecimal es %s\n------\n", HexaValor);
             fflush(stdin);
             getchar();
@@ -317,8 +330,7 @@ int main () {
             printf("\n\n------\n El Numero En Binario es ");
             DecToBin(HexToDec(Valor));
             printf("\n El Numero En Decimal es %ld\n", HexToDec(Valor));
-            printf("\n El Numero En Octal es %ld\n", DecToOct(HexToDec(Valor))); // Tengo que convertir octal a decimal a octal ya que que vector está lleno de $$$$ y necesito eliminarlo para imprimirlo o sino atoi() no funcionará
-            DecToHex(HexToDec(Valor));
+            printf("\n El Numero En Octal es %ld\n", DecToOct(HexToDec(Valor)));
             printf("\n El Numero En Hexadecimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c\n------\n", Valor[i]);
             fflush(stdin);
             getchar();
