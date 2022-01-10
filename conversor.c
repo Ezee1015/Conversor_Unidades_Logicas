@@ -86,25 +86,6 @@ long BinToDec (char Binario[1000]) {
     return Decimal;
 }
 
-/* int DecToOct (char Decimal[1000]) { */
-/*     int i, Octal=0; */
-
-/*     for(i=999;i>0;i--) { */
-/*         if (Decimal[i]=='1') Octal=Octal+(2^i); */
-/*         else if (Decimal[i]=='0') {} // No hacer anda. No se suma */
-/*         else if (Decimal[i]=='$') {} // No hacer anda. No se suma */
-/*         else { */
-/*             printf("ERROR EN EL BINARIO INGRESADO: Se ingreso un %c en la posicion %i", Decimal[i], i); */
-/*             return -1; */
-/*         } */
-/*     } */
-
-
-/*     return Octal; */
-/* } */
-
-
-
 long DecToOct (long Decimal) {
     int Dividendo=Decimal, Cociente=0;
     int Divisor=8, Resto=0, i=0;
@@ -144,7 +125,6 @@ long DecToOct (long Decimal) {
 long DecToHex (long Decimal) { //Pongo Long pero igualmente esta funcion no devuelve nada
     int Dividendo=Decimal, Divisor=16, Resto=0, Cociente=0, i=0;
     char Hexa[1000]="";
-    /* for(i=0;i<1004;i++) HexaValor[i]=""; */
 
     if (Dividendo > Divisor ) {
         while(Dividendo > Divisor ) {
@@ -227,8 +207,6 @@ long OctToDec (char Octal[1000]) {
     for(i=999; i>=0; i--) {
         if ((Octal[i])!='$') {
             Decimal=Decimal+((Octal[i]-'0')*(Pot(Base,(Largo-i)))); // Con el -'0' convertimos un caracter en entero ya que sacamos el codigo ascii al caracter. Ejemplo: Tomamos que el entero 2 tenga un valor en ascii de 50 y el entero 0 de 48, si hacemos Octal[i]-'0' estariamos haciendo un 50-48 que daria 2
-            /* printf("Valor Octal: %c en %i. ", Octal[i], Largo-i); */
-            /* printf("Se hace octal %i x pot %f que significa potencia de base %i ^ largo-i %i Y queda como total decimal %i\n", (Octal[i]-'0'), Pot(Base,(Largo-i)), Base, Largo-i, Decimal); */
         }
     }
 
@@ -339,7 +317,7 @@ int main () {
             printf("\n\n------\n El Numero En Binario es ");
             DecToBin(HexToDec(Valor));
             printf("\n El Numero En Decimal es %ld\n", HexToDec(Valor));
-            printf("\n El Numero En Octal es %ld\n", DecToOct(HexToDec(Valor)));// Tengo que convertir octal a decimal a octal ya que que vector está lleno de $$$$ y necesito eliminarlo para imprimirlo o sino atoi() no funcionará
+            printf("\n El Numero En Octal es %ld\n", DecToOct(HexToDec(Valor))); // Tengo que convertir octal a decimal a octal ya que que vector está lleno de $$$$ y necesito eliminarlo para imprimirlo o sino atoi() no funcionará
             DecToHex(HexToDec(Valor));
             printf("\n El Numero En Hexadecimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c\n------\n", Valor[i]);
             fflush(stdin);
