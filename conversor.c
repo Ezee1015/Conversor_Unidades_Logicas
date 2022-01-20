@@ -279,8 +279,6 @@ int main () {
         if (Valor[i]!='$') Largo++;
     }
 
-    printf("%lld", atoll(Valor));
-
     if (( (atoll(Valor) == 9223372036854775807 && Eleccion != '1') || atoll(Valor)<=-1 || (Largo > 63 && Eleccion == '1')/*  Limite de Caracteres y Numericos de Long Long */)) {
         char Desicion;
         printf("\n\n El Numero Ingresado Supera a la Memoria asignada en el Programa. Esto Puede Causar Resultados Erroneos!!");
