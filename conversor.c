@@ -6,7 +6,7 @@
 char HexaValor[1004]; // Tengo que crear esta variable porque no puedo pasar una cadena de caracteres como return de una función
 
 
-long Pot (int Base, int Exponente) {
+long long Pot (int Base, int Exponente) {
     if (Exponente==0) {
         return 1;
     } else {
@@ -65,14 +65,15 @@ int HexaToDecConverter (char Hexa) {
     return -1;
 }
 
-long BinToDec (char Binario[1000]) {
+long long BinToDec (char Binario[1000]) {
 
-    long Decimal=0;
+    long long Decimal=0;
     int i;
 
     for (i=0;i<1000;i++) {
         if(Binario[i]=='1'){
             Decimal=Decimal+Pot(2,i);
+            if ((Decimal+Pot(2,i)) > 9223372036854) { printf ("\n         ERROR: Desbordamiento De Memoria en BinToDec.\n             Los Resultado a Continuación Pueden ser Incorrectos."); return -1; }
         } else if (Binario[i]=='0') {
             // No hacer nada
         } else if (Binario[i]=='$') {
@@ -86,8 +87,8 @@ long BinToDec (char Binario[1000]) {
     return Decimal;
 }
 
-long DecToOct (long Decimal) {
-    int Dividendo=Decimal, Cociente=0;
+long long DecToOct (long long Decimal) {
+    long long Dividendo=Decimal, Cociente=0;
     int Divisor=8, Resto=0, i=0;
     char Octal[1000]="";
 
@@ -118,7 +119,7 @@ long DecToOct (long Decimal) {
     }
 
         // Agrega al Valor final el Cociente Final
-    long OctaValor=0;
+    long long OctaValor=0;
     for(i=0;i<Largo;i++){
         if (Octal[i]=='0' || Octal[i]=='1' || Octal[i]=='2' || Octal[i]=='3' || Octal[i]=='4' || Octal[i]=='5' || Octal[i]=='6' || Octal[i]=='7' || Octal[i]=='8' || Octal[i]=='9') OctaValor=OctaValor+((Octal[i]-'0') * Pot(10, Largo-i-1));
     }
@@ -129,8 +130,9 @@ long DecToOct (long Decimal) {
 
 }
 
-long DecToHex (long Decimal) { //Pongo Long pero igualmente esta funcion no devuelve nada
-    int Dividendo=Decimal, Divisor=16, Resto=0, Cociente=0, i=0;
+long long DecToHex (long long Decimal) { //Pongo long long pero igualmente esta funcion no devuelve nada
+    long long Dividendo=Decimal, Cociente=0;
+    int Divisor=16, Resto=0, i=0;
     char Hexa[1000]="";
 
     if (Dividendo > (Divisor-1) ) {
@@ -161,12 +163,14 @@ long DecToHex (long Decimal) { //Pongo Long pero igualmente esta funcion no devu
         HexaValor[(Largo-1)-i]=SWAP;
     }
 
-    return atol(HexaValor); // EN VALORES GRANDES NO FUNCIONA !!!!!! Por eso se usa HexaValor para devolver el resultado
+    return atoll(HexaValor); // EN VALORES GRANDES NO FUNCIONA !!!!!! Por eso se usa HexaValor para devolver el resultado
 }
 
-long DecToBin (long Decimal) {
+long long DecToBin (long long Decimal) {
+    if (Decimal == -1) return 0; // LLAVE DE CORTE EN CASO DE ERROR EN EL OctToDec YA QUE SI INGRESO UN OCTAL DE MAYOR TAMAÑO QUE UN Long Long O QUE EL PROCESAMIENTO DEVUELVE UN RESULTADO MAYOR QUE LA VARIABLE Long Long EN LA FUNCION OctToDec LA FUNCION DEVUELVE UN -1, EL CUAL SI ES METE EN ESTA FUNCION COMO PARAMETRO, IMPRIME UN VALOR CUALQUIERA AL FINAL DEL CARTEL DE AVISO DE ERROR
 
-    int Dividendo=Decimal, Divisor=2, Resto=0, Cociente=0, i=0;
+    long long Dividendo=Decimal, Cociente=0;
+    int Divisor=2, Resto=0, i=0;
     char Binario[1000]=" ";
 
     if (Dividendo > (Divisor-1) ) {
@@ -195,33 +199,35 @@ long DecToBin (long Decimal) {
     }
 
     printf("%s\n", Binario);
-    return atol(Binario); // EN VALORES GRANDES NO FUNCIONA !!!!!!
+    return atoll(Binario); // EN VALORES GRANDES NO FUNCIONA !!!!!!
     } else {
-        printf("%ld\n",Decimal);
+        printf("%lld\n",Decimal);
         return Decimal;
     }
 
 }
 
-long OctToDec (char Octal[1000]) {
-        int i=0, Decimal=0,Base=8, Largo=-1; // Tengo que inicializar el Largo en -1 ya que si lo inicializo en 0, el primero número del vector que se encuentre va a ser un Largo++ y va a quedar como 1, pero para el vector necesito que el numero que exista en la primera posicion sea 0
+long long OctToDec (char Octal[1000]) {
+    int i=0, Base=8, Largo=-1; // Tengo que inicializar el Largo en -1 ya que si lo inicializo en 0, el primero número del vector que se encuentre va a ser un Largo++ y va a quedar como 1, pero para el vector necesito que el numero que exista en la primera posicion sea 0
+    long long Decimal=0;
 
     for(i=0;i<1000;i++) {
-        if (Octal[i]=='0' || Octal[i]=='1' || Octal[i]=='2' || Octal[i]=='3' || Octal[i]=='4' || Octal[i]=='5' || Octal[i]=='6' || Octal[i]=='7' || Octal[i]=='8' || Octal[i]=='9') Largo++;
+        if (Octal[i]=='0' || Octal[i]=='1' || Octal[i]=='2' || Octal[i]=='3' || Octal[i]=='4' || Octal[i]=='5' || Octal[i]=='6' || Octal[i]=='7') Largo++;
     }
 
     for(i=999; i>=0; i--) {
         if ((Octal[i])!='$') {
             Decimal=Decimal+((Octal[i]-'0')*(Pot(Base,(Largo-i)))); // Con el -'0' convertimos un caracter en entero ya que sacamos el codigo ascii al caracter. Ejemplo: Tomamos que el entero 2 tenga un valor en ascii de 50 y el entero 0 de 48, si hacemos Octal[i]-'0' estariamos haciendo un 50-48 que daria 2
+            if ((Decimal+((Octal[i]-'0')*(Pot(Base,(Largo-i))))) > 9223372036854) { printf ("\n         ERROR: Desbordamiento De Memoria en OctToDec.\n             Los Resultado a Continuación Pueden ser Incorrectos."); return -1; }
         }
     }
 
     return Decimal;
 }
 
-long HexToDec (char Hexa[1000]) {
+long long HexToDec (char Hexa[1000]) {
      int i=0, Base=16, Largo=-1; // Tengo que inicializar el Largo en -1 ya que si lo inicializo en 0, el primero número del vector que se encuentre va a ser un Largo++ y va a quedar como 1, pero para el vector necesito que el numero que exista en la primera posicion sea 0
-     long Decimal=0;
+     long long Decimal=0;
 
     for(i=0;i<1000;i++) {
         if (Hexa[i]=='0' || Hexa[i]=='1' || Hexa[i]=='2' || Hexa[i]=='3' || Hexa[i]=='4' || Hexa[i]=='5' || Hexa[i]=='6' || Hexa[i]=='7' || Hexa[i]=='8' || Hexa[i]=='9' || Hexa[i]=='A' || Hexa[i]=='B' || Hexa[i]=='C' || Hexa[i]=='D' || Hexa[i]=='E' || Hexa[i]=='F') Largo++;
@@ -229,6 +235,7 @@ long HexToDec (char Hexa[1000]) {
 
     for(i=Largo; i>=0; i--) {
             Decimal=Decimal+((HexaToDecConverter(Hexa[i]))*(Pot(Base,(Largo-i))));
+            if (Decimal+((HexaToDecConverter(Hexa[i]))*(Pot(Base,(Largo-i)))) > 9223372036854) { printf ("\n         ERROR: Desbordamiento De Memoria en HexToDec.\n             Los Resultado a Continuación Pueden ser Incorrectos."); return -1; }
     }
 
     return Decimal;
@@ -240,7 +247,6 @@ int main () {
 
     for(i=0;i<1004;i++){
         HexaValor[i]=' ';
-        /* OctaValor[i]=' '; */
     }
 
     system("clear");
@@ -267,10 +273,16 @@ int main () {
         Caract=getchar();
     }
 
-    if ((atol(Valor)) > 2147483647 || atol(Valor)==-1) {
+    for(i=0;i<1000;i++) {
+        if (Valor[i]!='$') Largo++;
+    }
+
+    printf("%lld", atoll(Valor));
+
+    if (( (atoll(Valor) == 9223372036854775807 && Eleccion != '1') || atoll(Valor)<=-1 || (Largo > 63 && Eleccion == '1')/*  Limite de Caracteres y Numericos de Long Long */)) {
         char Desicion;
-        printf("\n\n El Numero Ingresado Supera a la Memoria asignada en el Programa. Esto PUEDE (No Siempre) llegar a Causar Resultados Erroneos!!");
-        printf("  Desesa Continuar? (1/0) > ");
+        printf("\n\n El Numero Ingresado Supera a la Memoria asignada en el Programa. Esto Puede Causar Resultados Erroneos!!");
+        printf("  Desesa Continuar de Todos Modos? (1/0) > ");
         fflush(stdin);
         Desicion=getchar();
         if (Desicion=='n' || Desicion=='N' || Desicion=='0') {  system("clear"); main(); return 0; }
@@ -284,17 +296,14 @@ int main () {
             printf("\n\n------\n El Numero En Binario es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);
 
                //Invierte el Vector ya que si ingeso un 000001 piensa que es 32
-            for(i=0;i<1000;i++) {
-                if (Valor[i]=='0' || Valor[i]=='1') Largo++;
-            }
-            for (i=0;i<(Largo/2);i++) {
+                        for (i=0;i<(Largo/2);i++) {
                 SWAP=Valor[i];
                 Valor[i]=Valor[(Largo-1)-i];
                 Valor[(Largo-1)-i]=SWAP;
             }
 
-            printf("\n\n El Numero En Decimal es %ld\n", BinToDec(Valor));
-            printf("\n El Numero En Octal es %ld\n", DecToOct(BinToDec(Valor)));
+            printf("\n\n El Numero En Decimal es %lld\n", BinToDec(Valor));
+            printf("\n El Numero En Octal es %lld\n", DecToOct(BinToDec(Valor)));
             DecToHex(BinToDec(Valor));
             printf("\n El Numero En Hexadecimal es %s\n------\n", HexaValor);
             fflush(stdin);
@@ -303,20 +312,22 @@ int main () {
 
         case '2' :
             printf("\n\n-----\n El Numero En Binario es ");
-            DecToBin(atol(Valor));
-            printf("\n El Numero En Decimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);
-            printf("\n\n El Numero En Octal es %ld\n", DecToOct(atol(Valor)));
-            DecToHex(atol(Valor));
+            DecToBin(atoll(Valor));
+            printf("\n El Numero En Decimal es %lld" , atoll(Valor));/*  for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);*/
+            printf("\n\n El Numero En Octal es %lld\n", DecToOct(atoll(Valor)));
+            DecToHex(atoll(Valor));
             printf("\n El Numero En Hexadecimal es %s\n------\n", HexaValor);
             fflush(stdin);
             getchar();
         break;
 
         case '3' :
+
+            for(i=0;i<1000;i++) if (Valor[i]=='8' || Valor[i]=='9') { printf("\n\n      Ingrese un Numero Octal Entero!\n"); fflush(stdin); getchar(); system("clear"); main(); return -1; }
             printf("\n\n------\n El Numero En Binario es ");
             DecToBin(OctToDec(Valor));
-            printf("\n El Numero En Decimal es %ld\n", OctToDec(Valor));
-            printf("\n El Numero En Octal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);
+            printf("\n El Numero En Decimal es %lld\n", OctToDec(Valor));
+            printf("\n El Numero En Octal es %lld", atoll(Valor)); /*for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);*/
             DecToHex(OctToDec((Valor)));
             printf("\n\n El Numero En Hexadecimal es %s\n------\n", HexaValor);
             fflush(stdin);
@@ -326,8 +337,8 @@ int main () {
         case '4' :
             printf("\n\n------\n El Numero En Binario es ");
             DecToBin(HexToDec(Valor));
-            printf("\n El Numero En Decimal es %ld\n", HexToDec(Valor));
-            printf("\n El Numero En Octal es %ld\n", DecToOct(HexToDec(Valor)));
+            printf("\n El Numero En Decimal es %lld\n", HexToDec(Valor));
+            printf("\n El Numero En Octal es %lld\n", DecToOct(HexToDec(Valor)));
             printf("\n El Numero En Hexadecimal es "); for(i=0;i<1000;i++) if (Valor[i]!='$') printf ("%c", Valor[i]);
             printf("\n------\n");
             fflush(stdin);
