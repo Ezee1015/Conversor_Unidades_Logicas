@@ -186,7 +186,7 @@ long long DecToBin (long long Decimal) {
             Dividendo=Cociente;
         }
 
-        sprintf(Binario,"%s%i", Binario, Cociente); // Agrega al Valor final el Cociente Final
+        sprintf(Binario,"%s%lld", Binario, Cociente); // Agrega al Valor final el Cociente Final
 
     char SWAP=' ';
     int Largo=0;
