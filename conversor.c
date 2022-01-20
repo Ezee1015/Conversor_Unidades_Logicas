@@ -121,9 +121,11 @@ long long DecToOct (long long Decimal) {
         // Agrega al Valor final el Cociente Final
     long long OctaValor=0;
     for(i=0;i<Largo;i++){
-        if (Octal[i]=='0' || Octal[i]=='1' || Octal[i]=='2' || Octal[i]=='3' || Octal[i]=='4' || Octal[i]=='5' || Octal[i]=='6' || Octal[i]=='7' || Octal[i]=='8' || Octal[i]=='9') OctaValor=OctaValor+((Octal[i]-'0') * Pot(10, Largo-i-1));
+        if (Octal[i]=='0' || Octal[i]=='1' || Octal[i]=='2' || Octal[i]=='3' || Octal[i]=='4' || Octal[i]=='5' || Octal[i]=='6' || Octal[i]=='7') OctaValor=OctaValor+((Octal[i]-'0') * Pot(10, Largo-i-1));
+            if ((OctaValor+((Octal[i]-'0') * Pot(10, Largo-i-1))) > 9223372036854) { printf ("\n         ERROR: Desbordamiento De Memoria en DecToOct.\n             Los Resultado a Continuación Pueden ser Incorrectos."); return -1; }
     }
     OctaValor=OctaValor+(Cociente * Pot(10, Largo));
+        if ((OctaValor+(Cociente * Pot(10, Largo))) > 9223372036854) { printf ("\n         ERROR: Desbordamiento De Memoria en DecToOct.\n             Los Resultado a Continuación Pueden ser Incorrectos."); return -1; }
 
 
     return OctaValor;
