@@ -263,7 +263,6 @@ int main () {
 
     if (Eleccion=='5') return 0;
 
-    i=0;
     getchar(); // Por algun Motivo tengo que poner un getchar suelto para que agarre basura o un salto de linea por culpa del selector de unidad a convertir de arriba. Ni con un fflush se soluciona
     printf("\n Ingrese el Numero a Procesar: ");
     fflush(stdin);
