@@ -279,7 +279,7 @@ int main () {
     scanf("%s", Valor);
 
     for(i=0;i<1000;i++) {
-        if (Valor[i]!='\n') Valor[i]='$';
+        if (Valor[i]=='\n') Valor[i]='$';
         if (Valor[i]!='$') Largo++;
     }
 
