@@ -264,7 +264,7 @@ int main () {
     Eleccion=getchar();
 
     if (Eleccion=='5') return 0;
-
+    i=0; // ELIMINA EL 1000 DEL for A 0 PARA CUANDO SE LEA EL NUMERO A PROCESAR
     getchar(); // Por algun Motivo tengo que poner un getchar suelto para que agarre basura o un salto de linea por culpa del selector de unidad a convertir de arriba. Ni con un fflush se soluciona
     printf("\n Ingrese el Numero a Procesar: ");
     fflush(stdin);
